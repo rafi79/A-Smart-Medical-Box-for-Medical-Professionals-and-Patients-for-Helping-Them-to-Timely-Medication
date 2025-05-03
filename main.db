@@ -1,0 +1,77 @@
+-- Smart Medical Box Database Schema
+-- This script creates all required tables for the Smart Medical Box system
+-- Based on the paper "A Smart Medical Box for Medical Professionals and Patients for Helping Them to Avail Timely Medication"
+
+-- Create database
+CREATE DATABASE IF NOT EXISTS smart_medical_box;
+USE smart_medical_box;
+
+-- Users table
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Devices table
+CREATE TABLE IF NOT EXISTS devices (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  device_id VARCHAR(50) NOT NULL UNIQUE,
+  user_id INT,
+  name VARCHAR(100),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Medications table
+CREATE TABLE IF NOT EXISTS medications (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  device_id INT,
+  name VARCHAR(100) NOT NULL,
+  hour TINYINT NOT NULL,
+  minute TINYINT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (device_id) REFERENCES devices(id) ON DELETE CASCADE
+);
+
+-- Medication logs table
+CREATE TABLE IF NOT EXISTS medication_logs (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  medication_id INT,
+  taken BOOLEAN DEFAULT FALSE,
+  taken_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (medication_id) REFERENCES medications(id) ON DELETE CASCADE
+);
+
+-- Create database user
+CREATE USER IF NOT EXISTS 'smart_med_user'@'localhost' IDENTIFIED BY 'your_secure_password';
+GRANT ALL PRIVILEGES ON smart_medical_box.* TO 'smart_med_user'@'localhost';
+FLUSH PRIVILEGES;
+
+-- Insert sample data (optional)
+
+-- Sample user
+INSERT INTO users (username, password, email) VALUES 
+('demouser', '$2b$10$X9ZjM7qRYQ1J5EnZM6NPOO3JVq7OAIAJj4i.9Kl/eUl3Fv7urPXfq', 'demo@example.com');
+-- Note: The password hash above is for 'password123'
+
+-- Sample device
+INSERT INTO devices (device_id, user_id, name) VALUES
+('SMB123456', 1, 'Living Room Medical Box');
+
+-- Sample medications
+INSERT INTO medications (device_id, name, hour, minute) VALUES
+(1, 'Antibiotic', 8, 0),
+(1, 'Antibiotic', 16, 0),
+(1, 'Vitamin C', 9, 30),
+(1, 'Blood Pressure Med', 20, 0);
+
+-- Sample medication logs
+INSERT INTO medication_logs (medication_id, taken, taken_at) VALUES
+(1, TRUE, '2025-05-02 08:05:23'),
+(2, TRUE, '2025-05-02 16:02:11'),
+(3, TRUE, '2025-05-02 09:45:10'),
+(4, TRUE, '2025-05-02 20:15:32');

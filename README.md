@@ -108,12 +108,4 @@ smart-medical-box/
 - Nazib Abdun Nasir
 - Md Tanzim Reza
 
-## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- BRAC University
-- Green University of Bangladesh
-- IEEE WIE Conference on Electrical and Computer Engineering

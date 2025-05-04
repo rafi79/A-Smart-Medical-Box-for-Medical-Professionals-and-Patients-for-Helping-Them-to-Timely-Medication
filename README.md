@@ -1,5 +1,5 @@
 # Smart Medical Box
-
+   
 A cloud-connected smart medication reminder system to help patients and medical professionals ensure timely medication.
 
 Conference Published - 2024 IEEE International Women in Engineering (WIE) Conference on Electrical and Computer Engineering (WIECON-ECE)
